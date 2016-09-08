@@ -53,3 +53,25 @@ Sincronización y Dead-Locks.
 9. Una vez corregido el problema, rectifique que el programa siga funcionando de manera consistente cuando se ejecutan 100, 1000 o 10000 inmortales. Si en estos casos grandes se empieza a incumplir de nuevo el invariante, debe analizar lo realizado en el paso 4.
 
 10. Para finalizar, implemente la opción STOP.
+
+
+###Criterios de evaluación
+
+1. Parte I.
+	* Funcional: La aplicación suspende a los hilos cuando hayan transcurrido los primeros cinco segundos de ejecución, muestra los resultados obtenidos y luego reanuda los cálculos al recibir ENTER. 
+
+2. Parte II.
+	* Diseño:
+		* Para garantizar la consistencia en la pelea entre dos inmortales, se debe sincronizar el acceso a cualquier otra pelea que involucre a uno, al otro, o a los dos simultáneamente:
+			* En los bloques anidados de sincronización requeridos para lo anterior, se debe garantizar que si los mismos locks son usados en dos peleas simultánemante, éstos será usados en el mismo orden para evitar deadlocks.
+			* En caso de sincronizar el acceso a la pelea con un LOCK común, se evaluará como M, pues esto hace secuencial todas las peleas.
+		* Para pausar la pelea, se debe lograr que el hilo principal induzca a los otros a que se suspendan a sí mismos. Se debe también tener en cuenta que sólo se debe mostrar la sumatoria de los puntos de vida cuando se asegure que todos los hilos han sido suspendidos.
+			* Si para lo anterior se recorre a todo el conjunto de hilos para ver su estado, se evalúa como R, por ser muy ineficiente.
+			* Si para lo anterior los hilos manipulan un contador concurrentemente, pero lo hacen sin tener en cuenta que el incremento de un contador no es una operación atómica -es decir, que puede causar una condición de carrera- , se evalúa como R. En este caso se debería sincronizar el acceso, o usar tipos atómicos como AtomicInteger).
+		* Se crea un mecanismo que permita al hilo principal inducir a que todos los hilos terminen su ejecución.
+		 
+	* Funcionalidad:
+		* Se cumple con el invariante al usar la aplicación con 10, 100 o 1000 hilos.
+		* La aplicación puede reanudar y finalizar(stop) su ejecución.
+		
+		
