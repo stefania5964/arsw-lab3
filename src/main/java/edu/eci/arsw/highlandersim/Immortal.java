@@ -5,6 +5,8 @@ import java.util.Random;
 
 public class Immortal extends Thread {
 
+    private ImmortalUpdateReportCallback updateCallback=null;
+    
     private int health;
     
     private int defaultDamageValue;
@@ -15,18 +17,10 @@ public class Immortal extends Thread {
 
     private final Random r = new Random(System.currentTimeMillis());
 
-    boolean pause = false;
 
-    public void pause() {
-        pause = true;
-    }
-
-    public void cont() {
-        pause = false;
-    }
-
-    public Immortal(String name, List<Immortal> immortalsPopulation, int health, int defaultDamageValue) {
+    public Immortal(String name, List<Immortal> immortalsPopulation, int health, int defaultDamageValue, ImmortalUpdateReportCallback ucb) {
         super(name);
+        this.updateCallback=ucb;
         this.name = name;
         this.immortalsPopulation = immortalsPopulation;
         this.health = health;
@@ -66,9 +60,9 @@ public class Immortal extends Thread {
         if (i2.getHealth() > 0) {
             i2.changeHealth(i2.getHealth() - defaultDamageValue);
             this.health += defaultDamageValue;
-            System.out.println("Fight: " + this + " vs " + i2);
+            updateCallback.processReport("Fight: " + this + " vs " + i2+"\n");
         } else {
-            System.out.println(this + " says:" + i2 + " is already dead!");
+            updateCallback.processReport(this + " says:" + i2 + " is already dead!\n");
         }
 
     }

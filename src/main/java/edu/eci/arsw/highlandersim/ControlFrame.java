@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.Color;
+import javax.swing.JScrollBar;
 
 public class ControlFrame extends JFrame {
 
@@ -31,6 +32,8 @@ public class ControlFrame extends JFrame {
     private List<Immortal> immortals;
 
     private JTextArea output;
+    private JLabel statisticsLabel;
+    private JScrollPane scrollPane;
     private JTextField numOfImmortals;
 
     /**
@@ -93,7 +96,9 @@ public class ControlFrame extends JFrame {
                     sum += im.getHealth();
                 }
 
-                output.setText(immortals.toString() + ". Sum:" + sum);
+                statisticsLabel.setText("<html>"+immortals.toString()+"<br>Health sum:"+ sum);
+                
+                
 
             }
         });
@@ -124,24 +129,30 @@ public class ControlFrame extends JFrame {
         btnStop.setForeground(Color.RED);
         toolBar.add(btnStop);
 
-        JScrollPane scrollPane = new JScrollPane();
+        scrollPane = new JScrollPane();
         contentPane.add(scrollPane, BorderLayout.CENTER);
 
         output = new JTextArea();
         output.setEditable(false);
         scrollPane.setViewportView(output);
+        
+        
+        statisticsLabel = new JLabel("Immortals total health:");
+        contentPane.add(statisticsLabel, BorderLayout.SOUTH);
 
     }
 
     public List<Immortal> setupInmortals() {
 
+        ImmortalUpdateReportCallback ucb=new TextAreaUpdateReportCallback(output,scrollPane);
+        
         try {
             int ni = Integer.parseInt(numOfImmortals.getText());
 
             List<Immortal> il = new LinkedList<Immortal>();
 
             for (int i = 0; i < ni; i++) {
-                Immortal i1 = new Immortal("im" + i, il, DEFAULT_IMMORTAL_HEALTH, DEFAULT_DAMAGE_VALUE);
+                Immortal i1 = new Immortal("im" + i, il, DEFAULT_IMMORTAL_HEALTH, DEFAULT_DAMAGE_VALUE,ucb);
                 il.add(i1);
             }
             return il;
@@ -152,4 +163,31 @@ public class ControlFrame extends JFrame {
 
     }
 
+}
+
+class TextAreaUpdateReportCallback implements ImmortalUpdateReportCallback{
+
+    JTextArea ta;
+    JScrollPane jsp;
+
+    public TextAreaUpdateReportCallback(JTextArea ta,JScrollPane jsp) {
+        this.ta = ta;
+        this.jsp=jsp;
+    }       
+    
+    @Override
+    public void processReport(String report) {
+        ta.append(report);
+
+        //move scrollbar to the bottom
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                JScrollBar bar = jsp.getVerticalScrollBar();
+                bar.setValue(bar.getMaximum());
+            }
+        }
+        );
+
+    }
+    
 }
