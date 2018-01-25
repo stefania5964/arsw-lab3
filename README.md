@@ -14,7 +14,14 @@ Control de hilos con wait/notify. Productor/consumidor.
 3. Haga que ahora el productor produzca muy rápido, y el consumidor consuma lento. Teniendo en cuenta que el productor conoce un límite de Stock (cuantos elementos debería tener, a lo sumo en la cola), haga que dicho límite se respete. Revise el API de la colección usada como cola para ver cómo garantizar que dicho límite no se supere. Verifique que, al poner un límite pequeño para el 'stock', no haya consumo alto de CPU ni errores.
 
 
-##### Parte II. – Avance para el martes, antes de clase.
+##### Parte II. – Antes de terminar la clase.
+
+Teniendo en cuenta los conceptos vistos de condición de carrera y sincronización, haga una nueva versión -más eficiente- del ejercicio anterior (el buscador de listas negras). En la versión actual, cada hilo se encarga de revisar el host en la totalidad del subconjunto de servidores que le corresponde, de manera que en conjunto se están explorando la totalidad de servidores. Teniendo esto en cuenta, haga que:
+
+- La búsqueda distribuida se detenga (deje de buscar en las listas negras restantes) y retorne la respuesta apenas, en su conjunto, los hilos hayan detectado el número requerido que determina si un host es confiable o no (_BLACK_LIST_ALARM_COUNT_).
+- Lo anterior, garantizando que no se den condiciones de carrera.
+
+##### Parte III. – Avance para el martes, antes de clase.
 
 Sincronización y Dead-Locks.
 
@@ -57,7 +64,7 @@ Sincronización y Dead-Locks.
 
 11. Para finalizar, implemente la opción STOP.
 
-
+<!--
 ### Criterios de evaluación
 
 1. Parte I.
@@ -77,4 +84,6 @@ Sincronización y Dead-Locks.
 		* Se cumple con el invariante al usar la aplicación con 10, 100 o 1000 hilos.
 		* La aplicación puede reanudar y finalizar(stop) su ejecución.
 		
-		
+		-->
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />Este contenido hace parte del curso Arquitecturas de Software del programa de Ingeniería de Sistemas de la Escuela Colombiana de Ingeniería, y está licenciado como <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
